@@ -14,13 +14,13 @@ Images    | Image Files for Readme , 1 sample monkey
  
  Developer: Sarah Bass
  
- Link: [https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
+ Link: 
  
-[![Watch the video](https://github.com/SarahBass/VirtualPetMonkey/blob/main/Untitled%20110.jpeg)](https://www.youtube.com/watch?v=Aabk3C7t-YM&t=2s)
+ [<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Untitled%20110.jpeg" width="300" height="155">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
  
- Price : FREE
- 
-Fitbit clock filled with cute interactions, daily changing pictures, and fun surprises.
+[<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Garmin%20logo%20icon%2033.jpeg" width="300" height="300">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
+
+[<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Garmin%20logo%20icon%2035.jpeg" width="300" height="300">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
 
 ## DESCRIPTION:
 Earn a surprise when you reach 3000 steps!
