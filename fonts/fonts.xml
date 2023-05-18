@@ -1,0 +1,5 @@
+<fonts>
+<font id = "WeatherFont" filename = "weatherhoro.fnt" filter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$%{@}=: ^()[?]_%.,-"/>
+<font id = "smallFont" filename = "small.fnt" filter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890{}:~ #^$[]@*+_%=~.?,-"/>
+<font id = "xsmallFont" filename = "xsmall.fnt" filter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890{}:~# @*^$[+=]_~?%.,-"/>
+</fonts>

@@ -1,0 +1,42 @@
+<drawables>
+    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+    <bitmap id="BIGDog0" filename="bigdog0.png" dithering="none"/>
+    <bitmap id="BIGDog1" filename="bigdog1.png"  dithering="none"/>
+    <bitmap id="BIGDog2" filename="bigdog2.png" dithering="none"/>
+    <bitmap id="BIGDog3" filename="bigdog3.png"  dithering="none"/>
+    <bitmap id="BIGDog4" filename="bigdog4.png"  dithering="none"/>
+    <bitmap id="SMALLDog0" filename="smalldog0.png" dithering="none"/>
+    <bitmap id="SMALLDog1" filename="smalldog1.png"  dithering="none"/>
+       <bitmap id="SMALLDog2" filename="smalldog2.png" dithering="none"/>
+    <bitmap id="SMALLDog3" filename="smalldog3.png"  dithering="none"/>
+    <bitmap id="SMALLDog4" filename="smalldog4.png"  dithering="none"/>
+    <bitmap id="Dog0" filename="dog0.png" dithering="none"/>
+    <bitmap id="Dog1" filename="dog1.png"  dithering="none"/>
+    <bitmap id="Dog2" filename="dog2.png"  dithering="none"/>
+    <bitmap id="Dog3" filename="dog3.png"  dithering="none"/>
+    <bitmap id="Dog4" filename="dog4.png"  dithering="none"/>
+
+ <bitmap id="mon" filename="mon.png"  dithering="none"/>
+ <bitmap id="tues" filename="tues.png"  dithering="none"/>
+ <bitmap id="wed" filename="wed.png"  dithering="none"/>
+  <bitmap id="thurs" filename="thurs.png"  dithering="none"/>
+   <bitmap id="fri" filename="fri.png"  dithering="none"/>
+    <bitmap id="sat" filename="sat.png"  dithering="none"/>
+     <bitmap id="sun" filename="sun.png"  dithering="none"/>
+
+<bitmap id="monbig" filename="monbig.png"  dithering="none"/>
+ <bitmap id="tuesbig" filename="tuesbig.png"  dithering="none"/>
+ <bitmap id="wedbig" filename="wedbig.png"  dithering="none"/>
+  <bitmap id="thursbig" filename="thursbig.png"  dithering="none"/>
+   <bitmap id="fribig" filename="fribig.png"  dithering="none"/>
+    <bitmap id="satbig" filename="satbig.png"  dithering="none"/>
+     <bitmap id="sunbig" filename="sunbig.png"  dithering="none"/>
+
+ <bitmap id="monsmall" filename="monsmall.png"  dithering="none"/>
+ <bitmap id="tuessmall" filename="tuessmall.png"  dithering="none"/>
+ <bitmap id="wedsmall" filename="wedsmall.png"  dithering="none"/>
+  <bitmap id="thurssmall" filename="thurssmall.png"  dithering="none"/>
+   <bitmap id="frismall" filename="frismall.png"  dithering="none"/>
+    <bitmap id="satsmall" filename="satsmall.png"  dithering="none"/>
+     <bitmap id="sunsmall" filename="sunsmall.png"  dithering="none"/>
+</drawables>
