@@ -1,8 +1,6 @@
 # VirtualPetMonkey
 Garmin Watchface : Animated and Interactive
 
-Stats heavy watch, filled with cute interactions, daily changing pictures, and fun surprises.
-
 ![Alt text](https://github.com/SarahBass/VirtualPetMonkey/blob/main/Largest%20garmin%2027.png)
 
 Contents: | Description:
@@ -16,55 +14,45 @@ Images    | Image Files for Readme , 1 sample monkey
  
  Developer: Sarah Bass
  
- Link: [https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd]
+ Link: [https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
  
- [![Watch the video](https://github.com/SarahBass/VirtualPetMonkey/blob/main/Untitled%20110.jpeg)](https://www.youtube.com/watch?v=Aabk3C7t-YM&t=2s)
+[![Watch the video](https://github.com/SarahBass/VirtualPetMonkey/blob/main/Untitled%20110.jpeg)](https://www.youtube.com/watch?v=Aabk3C7t-YM&t=2s)
  
  Price : FREE
  
 Fitbit clock filled with cute interactions, daily changing pictures, and fun surprises.
 
 ## DESCRIPTION:
-Virtual Pet Dog is a cute , animated pet that you can power up with your steps!
+Earn a surprise when you reach 3000 steps!
 
-Modeled after a real rescue dog, this virtual dog has all the characteristics of a Pomeranian, Sheltie, and Spitz. 'Butterball', a real puppy from California, was used as the inspiration and model for the design. This virtual dog is full of happy energy, but sleeps more than the other virtual dogs. He is easily frightened, likes to bark, likes junk food, gets sick sometimes, and likes to cause trouble!  
-
-Have fun exercising as this little dog gains hearts while you reach your goals. The virtual dog has three modes: sitting, walking, and sleeping. Based on your activity levels the dog will change what it does throughout the day and will have different moods. Dark Mode turns on automatically at 10PM to 6 AM. 
+Free Star Baby is a cute animated pet that earns a surprise when you reach 3000 steps. The surprises include : frogs, cookies, donuts, giant glow stick, birthday, strawberries, and fast food. This adorable baby alien might remind you of a famous character, but he is totally different! He is from a star far away, and his name is Baby Garmi. This watch has more animations than my other models and a free special font. 
 
 
 ## Stats:
 
->Walk: Distance in Miles or KM
+>Military and Standard Time
 
->Target : % of your goal reached
+>Full Date
 
->Fire : Total Daily Calories Burned
+>Steps
 
->Stairs: Total Daily Floors
+>Calories
 
->Bolt: Total Daily Active Minutes
+>Heart
 
->Heart : Heart Rate (Click Star to Start)
+>Weather
 
->Footprints: Total Daily Steps
+>Temperature in C or F
 
-## Seasons
+>Notifications
 
-### Spring
+>Alarms
 
-![Alt text](https://github.com/SarahBass/VirtualPetDog/blob/main/promo/Untitled_49.png)
+>Battery
 
-### Summer
+>Phone Connection
 
-![Alt text](https://github.com/SarahBass/VirtualPetDog/blob/main/promo/Untitled_49%207.png)
 
-### Fall
-
-![Alt text](https://github.com/SarahBass/VirtualPetDog/blob/main/promo/Untitled_49%206.png)
-
-### Winter
-
-![Alt text](https://github.com/SarahBass/VirtualPetDog/blob/main/promo/Untitled_49%204.png)
 
 
 
