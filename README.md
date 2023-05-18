@@ -56,6 +56,10 @@ Free Star Baby is a cute animated pet that earns a surprise when you reach 3000 
 
 
 
+https://github.com/SarahBass/VirtualPetMonkey/assets/69780815/4f3ea9a4-6c4a-4407-bda5-1cb4b35a5279
+
+
+
 
 
 
