@@ -1,7 +1,11 @@
 # VirtualPetMonkey
 Garmin Watchface : Animated and Interactive
 
-![Alt text](https://github.com/SarahBass/VirtualPetMonkey/blob/main/Largest%20garmin%2027.png)
+
+![Alt text](https://github.com/SarahBass/VirtualPetMonkey/blob/main/bigdog2.png)
+
+
+
 
 Contents: | Description:
 --------- | ------------
@@ -16,11 +20,11 @@ Images    | Image Files for Readme , 1 sample monkey
  
  Link: 
  
- [<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Untitled%20110.jpeg" width="300" height="155">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
+ [<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Untitled%20110.jpeg" width="200" height="100">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
  
-[<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Garmin%20logo%20icon%2033.jpeg" width="300" height="300">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
+[<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Garmin%20logo%20icon%2033.jpeg" width="200" height="200">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
 
-[<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Garmin%20logo%20icon%2035.jpeg" width="300" height="300">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
+[<img src="https://github.com/SarahBass/VirtualPetMonkey/blob/main/Garmin%20logo%20icon%2035.jpeg" width="200" height="200">](https://apps.garmin.com/en-US/apps/5a0ab9df-301b-4d21-bfa8-1f0aaa8ce2bd)
 
 ## DESCRIPTION:
 Earn a surprise when you reach 3000 steps!
@@ -52,11 +56,13 @@ Free Star Baby is a cute animated pet that earns a surprise when you reach 3000 
 
 >Phone Connection
 
+https://github.com/SarahBass/VirtualPetMonkey/assets/69780815/2e413d81-27ed-41b0-be6b-bdc86082efe0
 
 
 
 
-https://github.com/SarahBass/VirtualPetMonkey/assets/69780815/4f3ea9a4-6c4a-4407-bda5-1cb4b35a5279
+
+
 
 
 
