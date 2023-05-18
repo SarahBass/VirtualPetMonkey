@@ -1,4 +1,4 @@
-# VirtualPetMonkey
+# Virtual Monkey
 Garmin Watchface : Animated and Interactive
 
 
