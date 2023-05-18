@@ -2,7 +2,7 @@
 Garmin Watchface : Animated and Interactive
 
 
-![Alt text](https://github.com/SarahBass/VirtualPetMonkey/blob/main/bigdog2.png)
+![Alt text](https://github.com/SarahBass/VirtualPetMonkey/blob/main/animatedmonkeygif.png)
 
 
 
