@@ -9,23 +9,25 @@ import Toybox.ActivityMonitor;
 import Toybox.Time.Gregorian;
 
 class VirtualPetNothingView extends WatchUi.WatchFace {
+  
+function initialize() {  WatchFace.initialize(); }
 
-    function initialize() {
-        WatchFace.initialize();
-    }
+function onLayout(dc as Dc) as Void { }
 
+function onShow() as Void { }
 
-    function onLayout(dc as Dc) as Void {
-        setLayout(Rez.Layouts.WatchFace(dc));
-    }
-
- 
-    function onShow() as Void {
-    }
-
-    
-    function onUpdate(dc as Dc) as Void {
-        var mySettings = System.getDeviceSettings();
+function onUpdate(dc as Dc) as Void {
+       var mySettings = System.getDeviceSettings();
+       var screenHeightY = System.getDeviceSettings().screenHeight;
+       var adjustTextX = 1;
+       var adjustTextY = 1;
+       if (screenHeightY ==416){ adjustTextX = 1.15; adjustTextY = 1.17;}
+       else if (screenHeightY ==390){ adjustTextX = 1.1; adjustTextY = 1.1;}
+       else if (screenHeightY ==454){ adjustTextX = 1.25; adjustTextY = 1.28;}
+       else if (mySettings.screenShape != 1){ adjustTextX = 1.25; adjustTextY = 0.9;}
+       else{ adjustTextX = 1; adjustTextY = 1;}
+       var VXAdjust = ((System.getDeviceSettings().screenWidth)/360)*adjustTextX;
+       var VYAdjust =((System.getDeviceSettings().screenHeight)/360)*adjustTextY;
        var myStats = System.getSystemStats();
        var info = ActivityMonitor.getInfo();
        var timeFormat = "$1$:$2$";
@@ -38,30 +40,26 @@ class VirtualPetNothingView extends WatchUi.WatchFace {
             }
         } else {   
                 timeFormat = "$1$:$2$";
-                hours = hours.format("%02d");  
-        }
+                hours = hours.format("%02d"); }
         var timeString = Lang.format(timeFormat, [hours, clockTime.min.format("%02d")]);
-        var weekdayArray = ["Day", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as Array<String>;
-        var monthArray = ["Month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] as Array<String>;
- 
- var userBattery = "-";
-   if (myStats.battery != null){userBattery = Lang.format("$1$",[((myStats.battery.toNumber())).format("%2d")]);}else{userBattery="-";} 
-
+        var timeStamp= new Time.Moment(Time.today().value());
+        var weekdayArray = ["Day", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"] as Array<String>;
+        var monthArray = ["Month", "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"] as Array<String>;
+ var arrayPokemon = ["a","b","c", "d", "e", "f", "j", "h", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+ "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","0"];
+ var userBattery = "000";
+ var batteryMeter = 1;
+   if (myStats.battery != null){userBattery = Lang.format("$1$",[((myStats.battery.toNumber())).format("%02d")]);}else{userBattery="000";} 
+if (myStats.battery != null){batteryMeter = myStats.battery.toNumber();}else{batteryMeter="1";} 
    var userSTEPS = 0;
    if (info.steps != null){userSTEPS = info.steps.toNumber();}else{userSTEPS=0;} 
-
-  var userNotify = "-";
-   if (mySettings.notificationCount != null){userNotify = Lang.format("$1$",[((mySettings.notificationCount.toNumber())).format("%2d")]);}else{userNotify="-";} 
-
-var userAlarm = "-";
-   if (mySettings.alarmCount != null){userAlarm = Lang.format("$1$",[((mySettings.alarmCount.toNumber())).format("%2d")]);}else{userAlarm="-";} 
 
      var userCAL = 0;
    if (info.calories != null){userCAL = info.calories.toNumber();}else{userCAL=0;}  
    
    var getCC = Toybox.Weather.getCurrentConditions();
-    var TEMP = "--";
-    var FC = "-";
+    var TEMP = "000";
+    var FC = "0";
      if(getCC != null && getCC.temperature!=null){     
         if (System.getDeviceSettings().temperatureUnits == 0){  
     FC = "C";
@@ -70,163 +68,226 @@ var userAlarm = "-";
     TEMP = (((getCC.temperature*9)/5)+32).format("%d"); 
     FC = "F";   
     }}
-     else {TEMP = "--";}
+     else {TEMP = "000";}
     
-    var cond;
+    var cond=0;
     if (getCC != null){ cond = getCC.condition.toNumber();}
     else{cond = 0;}//sun
+ /*
+ var AMPM = "";       
+    if (!System.getDeviceSettings().is24Hour) {
+        if (clockTime.hour > 12) {
+                AMPM = "N";
+            }else{
+                AMPM = "M";
+            }}
+*/
+ var positions;
+        if (Toybox.Weather.getCurrentConditions().observationLocationPosition == null){
+        positions=new Position.Location( 
+    {
+        :latitude => 33.684566,
+        :longitude => -117.826508,
+        :format => :degrees
+    }
+    );
+    }else{
+      positions= Toybox.Weather.getCurrentConditions().observationLocationPosition;
+    }
     
-   //Get and show Heart Rate Amount
+  
 
-var userHEART = "--";
-if (getHeartRate() == null){userHEART = "--";}
-else if(getHeartRate() == 255){userHEART = "--";}
+  var sunrise = Time.Gregorian.info(Toybox.Weather.getSunrise(positions, timeStamp), Time.FORMAT_MEDIUM);
+        
+	var sunriseHour;
+  if (Toybox.Weather.getSunrise(positions, timeStamp) == null){sunriseHour = 6;}
+    else {sunriseHour= sunrise.hour;}
+         if (!System.getDeviceSettings().is24Hour) {
+            if (sunriseHour > 12) {
+                sunriseHour = (sunriseHour - 12).abs();
+            }
+        } else {
+           
+                timeFormat = "$1$:$2$";
+                sunriseHour = sunriseHour.format("%02d");
+        }
+        
+    var sunset;
+    var sunsetHour;
+    sunset = Time.Gregorian.info(Toybox.Weather.getSunset(positions, timeStamp), Time.FORMAT_MEDIUM);
+    if (Toybox.Weather.getSunset(positions, timeStamp) == null){sunsetHour = 6;}
+    else {sunsetHour= sunset.hour ;}
+        
+	
+         if (!System.getDeviceSettings().is24Hour) {
+            if (sunsetHour > 12) {
+                sunsetHour = (sunsetHour - 12).abs();
+            }
+        } else {
+            
+                timeFormat = "$1$:$2$";
+                sunsetHour = sunsetHour.format("%02d");
+        }           
+
+ var userNotify = "0";
+   if (mySettings.notificationCount != null){userNotify = Lang.format("$1$",[((mySettings.notificationCount.toNumber())).format("%2d")]);}else{userNotify="0";} 
+var numberNotify = 0;
+   if (mySettings.notificationCount != null){numberNotify = mySettings.notificationCount.toNumber();}else{numberNotify =0;} 
+var userHEART = "000";
+if (getHeartRate() == null){userHEART = "000";}
+else if(getHeartRate() == 255){userHEART = "000";}
 else{userHEART = getHeartRate().toString();}
 
-       var centerX = (dc.getWidth()) / 2;
-       //var centerY = (dc.getHeight());
+var moonnumber = getMoonPhase(today.year, ((today.month)-1), today.day);  
+var moon1 = moonArrFun(moonnumber);
+ var centerX = (dc.getWidth()) / 2;
+ var smallFont =  WatchUi.loadResource( Rez.Fonts.WeatherFont );
+ var wordFont =  WatchUi.loadResource( Rez.Fonts.smallFont );
+ var xsmallFont =  WatchUi.loadResource( Rez.Fonts.xsmallFont );
+ var smallpoke =  WatchUi.loadResource( Rez.Fonts.smallpoke );
 
-
-        var timeText = View.findDrawableById("TimeLabel") as Text;
-        var dateText = View.findDrawableById("DateLabel") as Text;
-        var batteryText = View.findDrawableById("batteryLabel") as Text;
-        var heartText = View.findDrawableById("heartLabel") as Text;
-        var stepText = View.findDrawableById("stepsLabel") as Text;
-        var calorieText = View.findDrawableById("caloriesLabel") as Text;
-        var temperatureText = View.findDrawableById("tempLabel") as Text;
-        var temperatureText1 = View.findDrawableById("tempLabel1") as Text;
-        var notificationLabel = View.findDrawableById("notificationLabel") as Text;
-        var alarmLabel = View.findDrawableById("alarmLabel") as Text;
-       var notificationcountLabel = View.findDrawableById("notificationcountLabel") as Text;
-        var alarmcountLabel = View.findDrawableById("alarmcountLabel") as Text;
-    
-        if (System.getDeviceSettings().screenHeight > 299){
-        var connectTextP = View.findDrawableById("connectLabelP") as Text;
-        var connectTextB = View.findDrawableById("connectLabelB") as Text;
-        connectTextP.locY = (((System.getDeviceSettings().screenHeight)*25.5/30));
-        connectTextB.locY = (((System.getDeviceSettings().screenHeight)*25.5/30));
-         if (mySettings.phoneConnected == true){connectTextP.setColor(0x48FF35);}
-    else{connectTextP.setColor(0xEF1EB8);}
-    if (myStats.charging == true){connectTextB.setColor(0x48FF35);}
-    else{connectTextB.setColor(0xEF1EB8);}
-        connectTextP.setText("  #  ");
-        connectTextB.setText("  @  ");
-        }else { }
-       
-       var HY = System.getDeviceSettings().screenHeight;
-       var WX = System.getDeviceSettings().screenWidth;
-        dateText.locY = (((HY)*21/30));
-        timeText.locY = (((HY)/30));   
-
-        if(mySettings.screenShape != 1){
-          
-        batteryText.locX = (((WX)/30));
-        heartText.locX = (((WX)*28/30));
-        stepText.locX = (((WX)*3/30));
-        stepText.locY = (((HY)*7/30));
-        calorieText.locX = (((WX)*27/30));
-        calorieText.locY = (((HY)*7/30));
-        temperatureText.locY = (((HY)*19/30));
-        temperatureText1.locY = (((HY)*20/30));
-        temperatureText.locX = (((WX)*3/30));
-        temperatureText1.locX = (((WX)*27/30));
-        notificationcountLabel.locY = (((HY)*25/30));
-        alarmcountLabel.locY = (((HY)*25/30));
-        notificationLabel.locY = (((HY)*25/30));
-        alarmLabel.locY = (((HY)*25/30));
-        notificationLabel.locX = (((WX)*10/30));
-        alarmLabel.locX = (((WX)*20/30));
-        }else{
-        batteryText.locX = (((WX)/30));
-        heartText.locX = (((WX)*28/30));
-        stepText.locX = (((WX)*3/30));
-        stepText.locY = (((HY)*10/30));
-        calorieText.locX = (((WX)*27/30));
-        calorieText.locY = (((HY)*10/30));
-        temperatureText.locY = (((HY)*17/30));
-        temperatureText1.locY = (((HY)*17/30));
-        temperatureText.locX = (((WX)*3/30));
-        temperatureText1.locX = (((WX)*27/30));
-
-        if (HY>299){
-        notificationcountLabel.locY = (((HY)*24/30));
-        alarmcountLabel.locY = (((HY)*24/30));
-        notificationLabel.locY = (((HY)*24/30));
-        alarmLabel.locY = (((HY)*24/30));
-        alarmLabel.locX = (((WX)*19/30));
-        notificationLabel.locX = (((WX)*21/60));
-        }else{
-           alarmLabel.locY = (((HY)*23/30));
-           alarmcountLabel.locY = (((HY)*23/30));
-           notificationLabel.locY = (((HY)*23/30));
-           notificationcountLabel.locY = (((HY)*23/30));
-        }
-
-        }
-        
-
-        timeText.setText(timeString);
-        dateText.setText(weekdayArray[today.day_of_week]+" , "+ monthArray[today.month]+" "+ today.day +" " +today.year);
-        batteryText.setText(" = "+userBattery+"%");
-        heartText.setText(userHEART+" + ");
-        stepText.setText(" ^ "+userSTEPS);
-        calorieText.setText(userCAL+" ~ ");
-        temperatureText.setText(weather(cond));
-        temperatureText1.setText(TEMP+" "+FC+" ");
-        notificationLabel.setText("r");
-        alarmLabel.setText("r");  
-        notificationcountLabel.setText(userAlarm+"                ");
-        alarmcountLabel.setText("               "+userNotify); 
-        var dog = dogPhase(today.sec, today.min);
-       var object = object(today.day_of_week);//today.day_of_week
         View.onUpdate(dc);
-        
-       
-        dog.draw(dc);
-        //object.draw(dc); //for testing
-       if (userSTEPS > 3000){ object.draw(dc);} 
-        if (mySettings.screenShape == 1){
-          if(System.getDeviceSettings().screenHeight < 301){dc.setPenWidth(22);}
-          else{dc.setPenWidth(30);}
 
-//0x555555 for 64 bit color and 16 bit color - only AMOLED can show 0x272727
-dc.setColor(0x272727, Graphics.COLOR_TRANSPARENT);
-dc.drawCircle(centerX, centerX, centerX);
-dc.setColor(0x48FF35, Graphics.COLOR_TRANSPARENT);
-dc.drawArc(centerX, centerX, centerX, Graphics.ARC_CLOCKWISE, 90, 47);
-dc.setColor(0xFFFF35, Graphics.COLOR_TRANSPARENT);
-dc.drawArc(centerX, centerX, centerX, Graphics.ARC_CLOCKWISE, 45, 2);
-dc.setColor(0xEF1EB8, Graphics.COLOR_TRANSPARENT);
-dc.drawArc(centerX, centerX, centerX, Graphics.ARC_CLOCKWISE, 0, 317);
-dc.setColor(0x00F7EE, Graphics.COLOR_TRANSPARENT);
-dc.drawArc(centerX, centerX, centerX, Graphics.ARC_CLOCKWISE, 315, 270);
-dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-dc.drawArc(centerX, centerX, centerX, Graphics.ARC_CLOCKWISE, 268, 266 - (userSTEPS/56));
-}else 
-{
-  dc.setPenWidth(15);
-  dc.setColor(0x272727, Graphics.COLOR_TRANSPARENT);
-  dc.drawRectangle(0, 0, dc.getWidth(), dc.getHeight());
-  dc.setColor(0x48FF35, Graphics.COLOR_TRANSPARENT);
-  dc.drawLine(0, 0, dc.getWidth(), 0);
-  dc.setColor(0xFFFF35, Graphics.COLOR_TRANSPARENT);
-  dc.drawLine(dc.getWidth(), dc.getHeight(), 0, dc.getHeight());
-  dc.setColor(0xEF1EB8, Graphics.COLOR_TRANSPARENT);
-  dc.drawLine(0, 0, 0, dc.getHeight());
-  dc.setColor(0x00F7EE, Graphics.COLOR_TRANSPARENT);
-  dc.drawLine(dc.getWidth(), 0, dc.getWidth(), dc.getHeight());
+
+if (mySettings.screenShape != 1){
+    var ExactY = (dc.getHeight());
+    var ExactX = (dc.getWidth());
+dc.setPenWidth(7);    
+dc.setColor(0x7B8863, Graphics.COLOR_TRANSPARENT);        
+dc.drawRectangle(0,0, ExactX, ExactY) ;     
+dc.setColor(0x3F4A4D, Graphics.COLOR_TRANSPARENT);        
+dc.fillRectangle(20,20, ExactX-40, ExactX-30) ;  
+dc.setColor(0x68664F, Graphics.COLOR_TRANSPARENT);        
+dc.drawRectangle(10,10, ExactX-20, ExactY-20) ;  
+dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);        
+dc.fillCircle(centerX, centerX,ExactX*5/10) ; 
+dc.setColor(0x7B8863, Graphics.COLOR_TRANSPARENT);        
+dc.drawCircle(centerX, centerX,ExactX*5/10) ; 
+dc.setColor(0x7B8863, Graphics.COLOR_TRANSPARENT);   
+dc.drawText(centerX, 320, wordFont,("HEALTH : "+userHEART + "                                                 LEVEL : " + userSTEPS/500 ),Graphics.TEXT_JUSTIFY_CENTER);
 }
+else{
+dc.setColor(0x7B8863, Graphics.COLOR_TRANSPARENT);        
+dc.fillCircle(centerX, centerX, centerX) ;     
+dc.setColor(0x68664F, Graphics.COLOR_TRANSPARENT);        
+dc.drawCircle(centerX, centerX, centerX) ;  
 
-        
-    }
+}
+dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);        
+dc.fillCircle(centerX, centerX,centerX*4/5) ; 
+//dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);        
+//dc.fillCircle(centerX, centerX,centerX*2/3) ; 
+dc.setColor(0x4D6A5D, Graphics.COLOR_TRANSPARENT); 
+dc.setPenWidth(125);       
+dc.drawArc(centerX, centerX, centerX*1/3, Graphics.ARC_CLOCKWISE , 180, 0) ;          
+
+dc.setColor(0x426058, Graphics.COLOR_TRANSPARENT);  
+dc.fillRectangle(centerX*150/360, centerX*322/360, centerX*1.2,centerX*35/360 ); 
+dc.fillRectangle(centerX*170/360, centerX*2*190/360, centerX*80/360,centerX*80/360 ); 
+//dc.fillRectangle(centerX*236*2/360, centerX*2*190/360, centerX*80/360,centerX*80/360 ); 
+dc.setColor(0x6B9884, Graphics.COLOR_TRANSPARENT); 
+dc.setPenWidth(10);       
+dc.drawCircle(centerX, centerX, centerX*2/3) ;  
+dc.setPenWidth(3);
+dc.setColor(0x4F563F, Graphics.COLOR_TRANSPARENT); 
+dc.drawRectangle(centerX*150/360, centerX*322/360, centerX*1.2,centerX*35/360 ); 
+dc.drawRectangle(centerX*170/360, centerX*2*190/360, centerX*80/360,centerX*80/360 ); 
+//dc.drawRectangle(centerX*236*2/360, centerX*2*190/360, centerX*80/360,centerX*80/360 );
+
+dc.setColor(0x3C5651, Graphics.COLOR_TRANSPARENT);  
+ dc.drawText(centerX,159*VYAdjust,xsmallFont,("OOOOOOOOOOOOOO"), Graphics.TEXT_JUSTIFY_CENTER );
+//~ fire ^footstep =battery + heart       
+//dc.setColor(0x628074, Graphics.COLOR_TRANSPARENT);
+/*if (!System.getDeviceSettings().is24Hour) {
+  if (hours>9){dc.drawText( centerX, 250*VYAdjust, smallFont,  "18:88M",  Graphics.TEXT_JUSTIFY_CENTER );}
+  else{dc.drawText( centerX, 250*VYAdjust, smallFont,  "8:88M",  Graphics.TEXT_JUSTIFY_CENTER );}}
+else{dc.drawText( centerX, 250*VYAdjust, smallFont,  "88:88",  Graphics.TEXT_JUSTIFY_CENTER );}*/
+dc.drawText( centerX, 88*VYAdjust, xsmallFont, "0000", Graphics.TEXT_JUSTIFY_CENTER  );
+dc.drawText( centerX, 128*VYAdjust, xsmallFont, "88888", Graphics.TEXT_JUSTIFY_CENTER  );
+//dc.drawText( 103*VXAdjust, 230*VYAdjust, wordFont,  ("00000"), Graphics.TEXT_JUSTIFY_CENTER );
+//dc.drawText(260*VXAdjust,230*VYAdjust, wordFont,("88888"),Graphics.TEXT_JUSTIFY_CENTER);
+ dc.drawText( 238*VXAdjust, 140*VYAdjust, xsmallFont,("8:88"), Graphics.TEXT_JUSTIFY_LEFT );
+dc.drawText(94*VXAdjust,140*VYAdjust, xsmallFont, ("8:88"), Graphics.TEXT_JUSTIFY_LEFT );
+dc.setColor(0x94B49F, Graphics.COLOR_TRANSPARENT);
+dc.drawText(centerX,  250*VYAdjust,smallFont, timeString,  Graphics.TEXT_JUSTIFY_CENTER  );
+ 
+//dc.drawText( 255*VXAdjust, 192*VYAdjust, smallFont, weather(cond), Graphics.TEXT_JUSTIFY_CENTER );
+  dc.drawText(centerX,159*VYAdjust,wordFont,(weekdayArray[today.day_of_week]+" , "+ monthArray[today.month]+" "+ today.day +" " +today.year), Graphics.TEXT_JUSTIFY_CENTER );
+// dc.drawText( 260*VXAdjust, 230*VYAdjust, wordFont,(TEMP+" " +FC), Graphics.TEXT_JUSTIFY_CENTER );
 
 
+
+if (today.sec%4==0){
+dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);  
+dc.drawText( 105*VXAdjust,  198*VYAdjust, wordFont,  (" ~ "), Graphics.TEXT_JUSTIFY_CENTER );
+dc.setColor(0x426058, Graphics.COLOR_TRANSPARENT); 
+dc.drawText( 108*VXAdjust, 230*VYAdjust, wordFont,  (" "+userCAL), Graphics.TEXT_JUSTIFY_CENTER );}
+
+else if (today.sec%4==1){
+dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+dc.drawText( 105*VXAdjust,  198*VYAdjust, wordFont,  (" ^ "), Graphics.TEXT_JUSTIFY_CENTER );
+dc.setColor(0x426058, Graphics.COLOR_TRANSPARENT); 
+dc.drawText( 108*VXAdjust, 230*VYAdjust, wordFont,  (" "+userSTEPS), Graphics.TEXT_JUSTIFY_CENTER );}
+
+else if (today.sec%4==2){
+dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+dc.drawText( 105*VXAdjust,  190*VYAdjust, smallFont, weather(cond), Graphics.TEXT_JUSTIFY_CENTER );
+dc.setColor(0x426058, Graphics.COLOR_TRANSPARENT); 
+dc.drawText( 108*VXAdjust, 230*VYAdjust, wordFont, (TEMP+" " +FC), Graphics.TEXT_JUSTIFY_CENTER );}
+else{
+if (numberNotify<60){
+ dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT); 
+dc.drawText(105*VXAdjust, 194*VYAdjust, smallpoke,arrayPokemon[numberNotify ],Graphics.TEXT_JUSTIFY_CENTER);}
+dc.setColor(0x426058, Graphics.COLOR_TRANSPARENT);  
+dc.drawText(108*VXAdjust, 230*VYAdjust, wordFont,userNotify,Graphics.TEXT_JUSTIFY_CENTER);
+ }
+
+dc.setColor(0x212D21, Graphics.COLOR_TRANSPARENT);   
+
+dc.drawText(94*VXAdjust,140*VYAdjust, xsmallFont, (sunriseHour + ":" + sunrise.min.format("%02u")), Graphics.TEXT_JUSTIFY_LEFT );
+dc.drawText(125*VXAdjust,140*VYAdjust, wordFont, ("  RIS  "), Graphics.TEXT_JUSTIFY_LEFT );
+dc.drawText(centerX,88*VYAdjust, xsmallFont, userBattery,Graphics.TEXT_JUSTIFY_CENTER);
+dc.drawText(centerX,140*VYAdjust, wordFont,"+",Graphics.TEXT_JUSTIFY_CENTER);      
+dc.drawText(centerX, 128*VYAdjust, xsmallFont, userHEART, Graphics.TEXT_JUSTIFY_CENTER ); 
+dc.drawText( 238*VXAdjust, 140*VYAdjust, xsmallFont,(sunsetHour + ":" + sunset.min.format("%02u")), Graphics.TEXT_JUSTIFY_LEFT );
+dc.drawText( 238*VXAdjust, 140*VYAdjust, wordFont,("SET  "), Graphics.TEXT_JUSTIFY_RIGHT );
+
+moon1.draw(dc);
+var dog = dogPhase(today.sec,1000);//userSTEPS
+dog.draw(dc);
+var fakesteps = userSTEPS;
+dc.setPenWidth(16);
+dc.setColor(0x6C7778, Graphics.COLOR_TRANSPARENT);
+dc.drawCircle(centerX, centerX, centerX*310/360);
+dc.setColor(0x2F4237, Graphics.COLOR_TRANSPARENT);
+if (fakesteps > 10000) {dc.drawCircle(centerX, centerX, centerX*310/360);
+}else { dc.drawArc(centerX, centerX, centerX*310/360, Graphics.ARC_CLOCKWISE, -270, (-269*(fakesteps))/10000 ); }
+dc.setPenWidth(14);
+dc.setColor(0x627871, Graphics.COLOR_TRANSPARENT);
+dc.drawCircle(centerX, centerX, centerX*250/360);
+dc.setColor(0x3C5C41, Graphics.COLOR_TRANSPARENT);
+dc.drawArc(centerX, centerX, centerX*250/360, Graphics.ARC_CLOCKWISE, 88, 87-((90* today.sec)/60)  );
+dc.setColor(0x4B6950, Graphics.COLOR_TRANSPARENT);
+dc.drawArc(centerX, centerX, centerX*250/360, Graphics.ARC_CLOCKWISE, 268, 267-((90* clockTime.hour)/24)  );
+dc.setColor(0x4D6753, Graphics.COLOR_TRANSPARENT);
+dc.drawArc(centerX, centerX, centerX*250/360, Graphics.ARC_CLOCKWISE, 178, 177-((90* today.day_of_week)/7)  );
+dc.setColor(0x3A5236, Graphics.COLOR_TRANSPARENT);
+dc.drawArc(centerX, centerX, centerX*250/360, Graphics.ARC_CLOCKWISE, 358, 357 - ((90* today.min)/60)  ); 
+dc.setColor(0x17231B, Graphics.COLOR_TRANSPARENT);  
+if(batteryMeter<33 &&batteryMeter>9){dc.fillRectangle(centerX*350/360, centerX*245/360, 9, 50/14);}
+else if(batteryMeter>33 && batteryMeter<66){
+dc.fillRectangle(centerX*350/360, centerX*235/360, 9, 50/14);
+dc.fillRectangle(centerX*350/360, centerX*245/360, 9, 50/14);}
+else if (batteryMeter >66){
+dc.fillRectangle(centerX*350/360, centerX*225/360, 9, 50/14);
+dc.fillRectangle(centerX*350/360, centerX*235/360, 9, 50/14);
+dc.fillRectangle(centerX*350/360, centerX*245/360, 9, 50/14);}
+else{}
+
+
+}
     function onHide() as Void { }
-
-    
     function onExitSleep() as Void {}
-
-    
     function onEnterSleep() as Void {}
 
 function weather(cond) {
@@ -240,301 +301,303 @@ function weather(cond) {
 }
 
 
-private function getHeartRate() {
-  // initialize it to null
-  var heartRate = null;
 
-  // Get the activity info if possible
+function dogPhase(seconds, steps){
+  var screenHeightY = System.getDeviceSettings().screenHeight;
+  var venus2X = 120*screenHeightY/360;
+  var venus2Y = 150*screenHeightY/360;
+  var dogARRAY = [
+    (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog0,
+            :locX=> venus2X*1.15,
+            :locY=>venus2Y*1.02
+ })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog1,
+            :locX=> venus2X*1.15,
+            :locY=>venus2Y*1.02
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog2,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog3,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog4,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                   (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog5,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog6,
+            :locX=> venus2X*1.3,
+            :locY=>venus2Y*1.2
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog7,
+            :locX=> venus2X*1.3,
+            :locY=>venus2Y*1.2
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog8,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+(new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog9,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog10,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog11,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog12,
+            :locX=> venus2X,
+            :locY=>venus2Y
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog13,
+            :locX=> venus2X,
+            :locY=>venus2Y
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog14,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog15,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog16,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog17,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog18,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog19,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog20,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog21,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog22,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog23,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog24,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog25,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog26,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog27,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog28,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog29,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog30,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog31,
+            :locX=> venus2X+2,
+            :locY=>venus2Y+3
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog32,
+            :locX=> venus2X*1.25,
+            :locY=>venus2Y*1.25
+        })),
+                     (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.dog33,
+            :locX=> venus2X*1.25,
+            :locY=>venus2Y*1.25
+        })),
+        ];
+        if (steps > 8000){return dogARRAY[32 + seconds%2];}else{return dogARRAY[((steps/500)*2) + seconds%2 ]  ;}
+        
+        
+  
+}
+
+private function getHeartRate() {// initialize it to null
+  var heartRate = null;// Get the activity info if possible
   var info = Activity.getActivityInfo();
   if (info != null) {
     heartRate = info.currentHeartRate;
-  } else {
-    // Fallback to `getHeartRateHistory`
+  } else { // Fallback to `getHeartRateHistory`
     var latestHeartRateSample = ActivityMonitor.getHeartRateHistory(1, true).next();
     if (latestHeartRateSample != null) {
       heartRate = latestHeartRateSample.heartRate;
+    } } // Could still be null if the device doesn't support it
+  return heartRate;}
+/*
+  __  __                 ___ _                 
+ |  \/  |___  ___ _ _   | _ \ |_  __ _ ___ ___ 
+ | |\/| / _ \/ _ \ ' \  |  _/ ' \/ _` (_-</ -_)
+ |_|  |_\___/\___/_||_| |_| |_||_\__,_/__/\___|
+ 
+*/
+function getMoonPhase(year, month, day) {
+
+      var c=0;
+      var e=0;
+      var jd=0;
+      var b=0;
+
+      if (month < 3) {
+        year--;
+        month += 12;
+      }
+
+      ++month; 
+
+      c = 365.25 * year;
+
+      e = 30.6 * month;
+
+      jd = c + e + day - 694039.09; 
+
+      jd /= 29.5305882; 
+
+      b = (jd).toNumber(); 
+
+      jd -= b; 
+
+      b = Math.round(jd * 8); 
+
+      if (b >= 8) {
+        b = 0; 
+      }
+     
+      return (b).toNumber();
     }
-  }
 
-  // Could still be null if the device doesn't support it
-  return heartRate;
-}
+     /*
+     0 => New Moon
+     1 => Waxing Crescent Moon
+     2 => Quarter Moon
+     3 => Waxing Gibbous Moon
+     4 => Full Moon
+     5 => Waning Gibbous Moon
+     6 => Last Quarter Moon
+     7 => Waning Crescent Moon
+     */
+function moonArrFun(moonnumber){
+var adjustTextX = 1;
+var adjustTextY = 1;
+       if (System.getDeviceSettings().screenHeight > 360){ adjustTextX = 1.07; adjustTextY = 1.05;}
+var venus2Y = (((System.getDeviceSettings().screenHeight)*91/360)*adjustTextY);
+var venus2XL = (((System.getDeviceSettings().screenWidth)*119/360)*adjustTextX);
 
-function object(dayofweek){
-  var mySettings = System.getDeviceSettings();
-  //0: normal 200 px 1:small 100 px 2:Large 200px 3:square
-var growX = 1; //0.75 for grow large 1.25 for shrink small 1 for normal or square
-var growY = 1;
-var size = 0;
-      if (System.getDeviceSettings().screenHeight < 301){
-        size =1;
-        growX=1.1;
-        growY=1.6;
-      }else if (System.getDeviceSettings().screenHeight > 390){
-        size=2;
-        growX=0.85;
-        growY=growX*growX;
-      }else if (mySettings.screenShape != 1){
-        size=0;
-        growX=0.80;
-        growY=1;
-      }else{
-        size=0;
-        growX=0.8;
-        growY=1;
-      }
-  var venus2X =  mySettings.screenWidth *0.25*growX ;
-  var venus2Y =  mySettings.screenHeight *0.18*growY ;
-var objectARRAY;
-if (size ==1){
- objectARRAY=[
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.sunsmall,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-      (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.monsmall,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.tuessmall,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.wedsmall,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.thurssmall,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-            (  new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.frismall,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-           ( new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.satsmall,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        }))
-     ];
-}
-else if (size ==2){
- objectARRAY=[
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.sunbig,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-      (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.monbig,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.tuesbig,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.wedbig,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.thursbig,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-            (  new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.fribig,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-           ( new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.satbig,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        }))
-     ];
-}else{
- objectARRAY=[
-      (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.sun,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.mon,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.tues,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.wed,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-              (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.thurs,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-            (  new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.fri,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-           ( new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.sat,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        }))
-     ];
-}
-  return objectARRAY[(dayofweek-1)];
-}
-
-
-
-function dogPhase(seconds, minutes){
-  var mySettings = System.getDeviceSettings();
-  var size= 0;//0: normal 200 px 1:small 100 px 2:Large 200px 3:square
-var growX = 1; //0.75 for grow large 1.25 for shrink small 1 for normal or square
-var growY = 1;
-      if (System.getDeviceSettings().screenHeight < 301){
-        size=1;
-        growX=1.1;
-        growY=1.6;
-      }else if (System.getDeviceSettings().screenHeight > 390){
-        size=2;
-        growX=0.85;
-        growY=growX*growX;
-      }else if (mySettings.screenShape != 1){
-        size=3;
-        growX=0.80;
-        growY=1;
-      }else{
-        size=0;
-        growX=0.8;
-        growY=1;
-      }
-
-  var venus2X =  mySettings.screenWidth *0.25*growX ;
-  var venus2Y =  mySettings.screenHeight *0.18*growY ;
-  var dogARRAY;
-if (size == 1){
- dogARRAY = [
-(new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.SMALLDog0,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.SMALLDog1,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.SMALLDog2,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.SMALLDog3,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.SMALLDog4,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.SMALLDog0,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        }))
- ];
-}
-else if (size == 2){     
-   dogARRAY = [
-(new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.BIGDog0,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.BIGDog1,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.BIGDog2,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.BIGDog3,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.BIGDog4,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.BIGDog0,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
- ];      
-}
-else {
-   dogARRAY = [
-(new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.Dog0,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.Dog1,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.Dog2,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.Dog3,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
-        (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.Dog4,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        })),
+  var moonArray= [
           (new WatchUi.Bitmap({
-            :rezId=>Rez.Drawables.Dog0,
-            :locX=> venus2X,
-            :locY=>venus2Y
-        }))
- ]; 
+            :rezId=>Rez.Drawables.newmoon,//0
+            :locX=> venus2XL,
+            :locY=> venus2Y
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.waxcres,//1
+            :locX=> venus2XL,
+            :locY=> venus2Y
+        })),
+        (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.firstquar,//2
+            :locX=> venus2XL,
+            :locY=> venus2Y
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.waxgib,//3
+            :locX=> venus2XL,
+            :locY=> venus2Y
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.full,//4
+            :locX=> venus2XL,
+            :locY=> venus2Y
+        })),
+                (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.wangib,//5
+            :locX=> venus2XL,
+            :locY=> venus2Y
+        })),
+            (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.thirdquar,//6
+            :locX=> venus2XL,
+            :locY=> venus2Y
+        })),
+           (new WatchUi.Bitmap({
+            :rezId=>Rez.Drawables.wancres,//7
+            :locX=> venus2XL,
+            :locY=> venus2Y,
+        })),
+        ];
+        return moonArray[moonnumber];
 }
-return dogARRAY[seconds%2+minutes%5];
-}
+
+
 }
