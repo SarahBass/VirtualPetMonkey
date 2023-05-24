@@ -26,6 +26,7 @@ function onUpdate(dc as Dc) as Void {
        else if (screenHeightY ==454){ adjustTextX = 1.25; adjustTextY = 1.28;}
        else if (mySettings.screenShape != 1){ adjustTextX = 1.25; adjustTextY = 0.9;}
        else{ adjustTextX = 1; adjustTextY = 1;}
+
        var VXAdjust = ((System.getDeviceSettings().screenWidth)/360)*adjustTextX;
        var VYAdjust =((System.getDeviceSettings().screenHeight)/360)*adjustTextY;
        var myStats = System.getSystemStats();
@@ -164,7 +165,7 @@ dc.fillCircle(centerX, centerX,ExactX*5/10) ;
 dc.setColor(0x7B8863, Graphics.COLOR_TRANSPARENT);        
 dc.drawCircle(centerX, centerX,ExactX*5/10) ; 
 dc.setColor(0x7B8863, Graphics.COLOR_TRANSPARENT);   
-dc.drawText(centerX, 320, wordFont,("HEALTH : "+userHEART + "                                                 LEVEL : " + userSTEPS/500 ),Graphics.TEXT_JUSTIFY_CENTER);
+dc.drawText(centerX, 320, wordFont,("HEALTH : "+userHEART + "                                                 LEVEL : " + userBattery ),Graphics.TEXT_JUSTIFY_CENTER);
 }
 else{
 dc.setColor(0x7B8863, Graphics.COLOR_TRANSPARENT);        
@@ -192,28 +193,20 @@ dc.setPenWidth(3);
 dc.setColor(0x4F563F, Graphics.COLOR_TRANSPARENT); 
 dc.drawRectangle(centerX*150/360, centerX*322/360, centerX*1.2,centerX*35/360 ); 
 dc.drawRectangle(centerX*170/360, centerX*2*190/360, centerX*80/360,centerX*80/360 ); 
-//dc.drawRectangle(centerX*236*2/360, centerX*2*190/360, centerX*80/360,centerX*80/360 );
 
 dc.setColor(0x3C5651, Graphics.COLOR_TRANSPARENT);  
  dc.drawText(centerX,159*VYAdjust,xsmallFont,("OOOOOOOOOOOOOO"), Graphics.TEXT_JUSTIFY_CENTER );
 //~ fire ^footstep =battery + heart       
-//dc.setColor(0x628074, Graphics.COLOR_TRANSPARENT);
-/*if (!System.getDeviceSettings().is24Hour) {
-  if (hours>9){dc.drawText( centerX, 250*VYAdjust, smallFont,  "18:88M",  Graphics.TEXT_JUSTIFY_CENTER );}
-  else{dc.drawText( centerX, 250*VYAdjust, smallFont,  "8:88M",  Graphics.TEXT_JUSTIFY_CENTER );}}
-else{dc.drawText( centerX, 250*VYAdjust, smallFont,  "88:88",  Graphics.TEXT_JUSTIFY_CENTER );}*/
+if (mySettings.screenShape == 1){
 dc.drawText( centerX, 88*VYAdjust, xsmallFont, "0000", Graphics.TEXT_JUSTIFY_CENTER  );
-dc.drawText( centerX, 128*VYAdjust, xsmallFont, "88888", Graphics.TEXT_JUSTIFY_CENTER  );
-//dc.drawText( 103*VXAdjust, 230*VYAdjust, wordFont,  ("00000"), Graphics.TEXT_JUSTIFY_CENTER );
-//dc.drawText(260*VXAdjust,230*VYAdjust, wordFont,("88888"),Graphics.TEXT_JUSTIFY_CENTER);
+dc.drawText( centerX, 128*VYAdjust, xsmallFont, "88888", Graphics.TEXT_JUSTIFY_CENTER  );}
+
  dc.drawText( 238*VXAdjust, 140*VYAdjust, xsmallFont,("8:88"), Graphics.TEXT_JUSTIFY_LEFT );
 dc.drawText(94*VXAdjust,140*VYAdjust, xsmallFont, ("8:88"), Graphics.TEXT_JUSTIFY_LEFT );
 dc.setColor(0x94B49F, Graphics.COLOR_TRANSPARENT);
 dc.drawText(centerX,  250*VYAdjust,smallFont, timeString,  Graphics.TEXT_JUSTIFY_CENTER  );
- 
-//dc.drawText( 255*VXAdjust, 192*VYAdjust, smallFont, weather(cond), Graphics.TEXT_JUSTIFY_CENTER );
-  dc.drawText(centerX,159*VYAdjust,wordFont,(weekdayArray[today.day_of_week]+" , "+ monthArray[today.month]+" "+ today.day +" " +today.year), Graphics.TEXT_JUSTIFY_CENTER );
-// dc.drawText( 260*VXAdjust, 230*VYAdjust, wordFont,(TEMP+" " +FC), Graphics.TEXT_JUSTIFY_CENTER );
+ dc.drawText(centerX,159*VYAdjust,wordFont,(weekdayArray[today.day_of_week]+" , "+ monthArray[today.month]+" "+ today.day +" " +today.year), Graphics.TEXT_JUSTIFY_CENTER );
+
 
 
 
@@ -242,18 +235,32 @@ dc.setColor(0x426058, Graphics.COLOR_TRANSPARENT);
 dc.drawText(108*VXAdjust, 230*VYAdjust, wordFont,userNotify,Graphics.TEXT_JUSTIFY_CENTER);
  }
 
-dc.setColor(0x212D21, Graphics.COLOR_TRANSPARENT);   
 
-dc.drawText(94*VXAdjust,140*VYAdjust, xsmallFont, (sunriseHour + ":" + sunrise.min.format("%02u")), Graphics.TEXT_JUSTIFY_LEFT );
-dc.drawText(125*VXAdjust,140*VYAdjust, wordFont, ("  RIS  "), Graphics.TEXT_JUSTIFY_LEFT );
+
+
+
+
+if (mySettings.screenShape == 1){
+dc.setColor(0x212D21, Graphics.COLOR_TRANSPARENT);       
 dc.drawText(centerX,88*VYAdjust, xsmallFont, userBattery,Graphics.TEXT_JUSTIFY_CENTER);
 dc.drawText(centerX,140*VYAdjust, wordFont,"+",Graphics.TEXT_JUSTIFY_CENTER);      
 dc.drawText(centerX, 128*VYAdjust, xsmallFont, userHEART, Graphics.TEXT_JUSTIFY_CENTER ); 
 dc.drawText( 238*VXAdjust, 140*VYAdjust, xsmallFont,(sunsetHour + ":" + sunset.min.format("%02u")), Graphics.TEXT_JUSTIFY_LEFT );
 dc.drawText( 238*VXAdjust, 140*VYAdjust, wordFont,("SET  "), Graphics.TEXT_JUSTIFY_RIGHT );
+dc.drawText(94*VXAdjust,140*VYAdjust, xsmallFont, (sunriseHour + ":" + sunrise.min.format("%02u")), Graphics.TEXT_JUSTIFY_LEFT );
+dc.drawText(125*VXAdjust,140*VYAdjust, wordFont, ("  RIS  "), Graphics.TEXT_JUSTIFY_LEFT );}
+else{
+dc.setColor(0x212D21, Graphics.COLOR_TRANSPARENT);  
+dc.drawText( 210, 140*VYAdjust, xsmallFont,(sunsetHour + ":" + sunset.min.format("%02u")), Graphics.TEXT_JUSTIFY_LEFT );
+dc.drawText( centerX, 140*VYAdjust, wordFont,(" SUNSET "), Graphics.TEXT_JUSTIFY_LEFT );
+dc.drawText(110,140*VYAdjust, xsmallFont, (sunriseHour + ":" + sunrise.min.format("%02u")), Graphics.TEXT_JUSTIFY_RIGHT );
+dc.drawText(centerX,140*VYAdjust, wordFont, (" SUNRISE "), Graphics.TEXT_JUSTIFY_RIGHT );}  
+
+
+
 
 moon1.draw(dc);
-var dog = dogPhase(today.sec,1000);//userSTEPS
+var dog = dogPhase(today.sec,userSTEPS);
 dog.draw(dc);
 var fakesteps = userSTEPS;
 dc.setPenWidth(16);
@@ -303,9 +310,14 @@ function weather(cond) {
 
 
 function dogPhase(seconds, steps){
+    var adjustTextX = 1;
+var adjustTextY = 1;
+       if (System.getDeviceSettings().screenHeight > 360){ adjustTextX = 1.07; adjustTextY = 1.05;}
+       else if (System.getDeviceSettings() != 1){ adjustTextX = 0.95; adjustTextY = 0.85;}
+       else{adjustTextX = 1; adjustTextY = 1;}
   var screenHeightY = System.getDeviceSettings().screenHeight;
-  var venus2X = 120*screenHeightY/360;
-  var venus2Y = 150*screenHeightY/360;
+  var venus2X = (120*screenHeightY/360) *adjustTextX;
+  var venus2Y = (150*screenHeightY/360)*adjustTextY;
   var dogARRAY = [
     (new WatchUi.Bitmap({
             :rezId=>Rez.Drawables.dog0,
@@ -551,6 +563,8 @@ function moonArrFun(moonnumber){
 var adjustTextX = 1;
 var adjustTextY = 1;
        if (System.getDeviceSettings().screenHeight > 360){ adjustTextX = 1.07; adjustTextY = 1.05;}
+       else if (System.getDeviceSettings() != 1){ adjustTextX = 0.95; adjustTextY = 0.85;}
+       else{adjustTextX = 1; adjustTextY = 1;}
 var venus2Y = (((System.getDeviceSettings().screenHeight)*91/360)*adjustTextY);
 var venus2XL = (((System.getDeviceSettings().screenWidth)*119/360)*adjustTextX);
 
